@@ -1,0 +1,27 @@
+{% extends "board/base.html" %}
+
+
+{% block content %}
+    {% if form.errors %}
+        <p>이름과 비밀번호가 일치하지 않습니다. 다시 시도해주세요.</p>
+    {% endif %}
+
+    <form class="form-signin" method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+        <table>
+        <tr>
+            <td>{{ form.username.label_tag }}</td>
+            <td>{{ form.username }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.password.label_tag }}</td>
+            <td>{{ form.password }}</td>
+        </tr>
+        </table>
+
+        <input type="submit" value="로그인" />
+        <input type="hidden" name="next" value="{{ next }}" />
+        <p>아이디가 없으신가요? <a href="{% url 'board:signup'%}" class="btn btn-sm btn-primary">회원가입</a></p>
+    </form>
+    
+{% endblock %}

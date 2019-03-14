@@ -1,0 +1,23 @@
+{% extends 'board/base.html' %}
+
+{% block dropdown %}
+    {% for cat in categories %}
+        {% comment %} <li><a href="{% url 'board:post_list' pk=cat.id %}">{{ cat.name }}</a></li> {% endcomment %}
+        <a class="dropdown-item" href="{% url 'board:post_list' pk=cat.id %}">{{ cat.name }}</a>
+    {% endfor %}
+{% endblock %}
+
+{% block content %}
+    <h2><small>안녕하세요!</small> {{ user.username }}<small>님!</small></h2>
+    {% if my_account %}
+        <p>나의 가상화폐 계좌번호: {{ my_account }}</p>
+    {% else %}
+        <p>계좌를 가지고 있지 않아요!  <a href="{% url 'board:make_account'%}" class="btn btn-sm btn-primary">계좌번호 생성</a></p>
+    {% endif %}
+        <p>내가 올린 포스트 : {{ my_posts|length }}</p>
+        <p>내가 받은 추천 : {{ my_score }}</p>
+    {% comment %} 
+        <form method="post" action="{% url 'board:my_info' %}"> {% csrf_token %}
+        </form> 
+    {% endcomment %}
+{% endblock %}

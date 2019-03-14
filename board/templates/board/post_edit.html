@@ -1,0 +1,19 @@
+{% extends 'board/base.html' %}
+
+{% block dropdown %}
+    {% for cat in categories %}
+        {% comment %} <li><a href="{% url 'board:post_list' pk=cat.id %}">{{ cat.name }}</a></li> {% endcomment %}
+        <a class="dropdown-item" href="{% url 'board:post_list' pk=cat.id %}">{{ cat.name }}</a>
+    {% endfor %}
+{% endblock %}
+
+{% block content %}
+    <h2>포스트 편집 창</h2>
+    <form method="POST" class="post-form" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table>
+		    {{ form.as_table }}
+	    </table>
+        <button type="submit" class="save btn btn-default">저장</button>
+    </form>
+{% endblock %}
