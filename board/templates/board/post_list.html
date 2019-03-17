@@ -3,22 +3,21 @@
 {% block dropdown %}
     {% for cat in categories %}
         {% if selected_category and cat == selected_category %}
-            {% comment %} <li class="active"><a href="{% url 'board:post_list' pk=cat.id %}">{{ cat.name }}</a></li> {% endcomment %}
             <a class="dropdown-item active" href="{% url 'board:post_list' pk=cat.id %}">{{ cat.name }}</a>
         {% else %}
-            {% comment %} <li><a href="{% url 'board:post_list' pk=cat.id %}">{{ cat.name }}</a></li> {% endcomment %}
             <a class="dropdown-item" href="{% url 'board:post_list' pk=cat.id %}">{{ cat.name }}</a>
         {% endif %}
     {% endfor %}
 {% endblock %}
 
+{% comment %} 
 {% block search %}
     <form class="form-inline mt-2 mt-md-0 mr-md-2">
-    {% comment %} <form class="form-inline mt-2 mt-md-0 mr-md-2" method="post" action="{% url 'board:post_search' %}"> {% endcomment %}
-        <input class="form-control mr-sm-2" type="text" placeholder="검색" aria-label="Search">
+    <!--form class="form-inline mt-2 mt-md-0 mr-md-2" method="post" action="{% url 'board:post_search' %}"-->
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">찾기</button>
     </form>
-{% endblock %}
+{% endblock %} 
+{% endcomment %}
 
 {% block content %}
     {% if selected_category %}
@@ -31,7 +30,7 @@
         <div class="post">
             <h2>
                 <a href="{% url 'board:post_detail' pk=post.pk %}">{{ post.title }}</a>
-                <small><i>{{ post.category }}, 작성자: {{ post.author }}, 추천: {{ post.like }} </i></small>
+                <small><i>{{ post.category }}, 작성자: {{ post.author }} [+{{ post.like }}/-{{ post.dislike }}] </i></small>
             </h2>
             <p><span class="date">{{ post.created_date }}</span></p>
         </div>

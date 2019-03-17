@@ -2,7 +2,6 @@
 
 {% block dropdown %}
     {% for cat in categories %}
-        {% comment %} <li><a href="{% url 'board:post_list' pk=cat.id %}">{{ cat.name }}</a></li> {% endcomment %}
         <a class="dropdown-item" href="{% url 'board:post_list' pk=cat.id %}">{{ cat.name }}</a>
     {% endfor %}
 {% endblock %}

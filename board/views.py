@@ -29,9 +29,6 @@ def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     return render(request, 'board/post_detail.html', {'post': post, 'categories': categories})
 
-# def post_search(request):
-#     return null
-
 @login_required
 def post_new(request):
     categories = Category.objects.all().order_by('id')
@@ -72,7 +69,13 @@ def post_remove(request, pk):
 @login_required
 def post_like(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    post.liked()
+    post.liked(request.user.username)
+    return redirect('board:post_detail', pk=post.pk)
+
+@login_required
+def post_dislike(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    post.disliked(request.user.username)
     return redirect('board:post_detail', pk=post.pk)
 
 @login_required
@@ -99,5 +102,4 @@ def make_account(request):
     my_score = 0
     for post in my_posts:
         my_score += post.like
-    # todo: 가상화폐 연동
     return render(request, 'board/my_info.html', {'my_account': my_account, 'my_posts': my_posts, 'my_score': my_score, 'categories': categories})

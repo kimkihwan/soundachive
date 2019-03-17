@@ -22,15 +22,3 @@ class CoinAccountForm(forms.ModelForm):
         labels = {
             'address': '계좌번호',
         }
-
-# class UserInfoForm(forms.ModelForm):
-
-#     class Meta:
-#         model = User
-#         fields = ("first_name", "last_name", "email", "address")
-#         labels = {
-#             'first_name': '이름',
-#             'last_name': '성',
-#             'email': '이메일',
-#             'address': '가상화폐 계좌',
-#         }

@@ -3,10 +3,8 @@
 {% block dropdown %}
     {% for cat in categories %}
         {% if cat == post.category %}
-            {% comment %} <li class="active"><a href="{% url 'board:post_list' pk=cat.id %}" class="active">{{ cat.name }}</a></li> {% endcomment %}
             <a class="dropdown-item active" href="{% url 'board:post_list' pk=cat.id %}">{{ cat.name }}</a>
         {% else %}
-            {% comment %} <li><a href="{% url 'board:post_list' pk=cat.id %}">{{ cat.name }}</a></li> {% endcomment %}
             <a class="dropdown-item" href="{% url 'board:post_list' pk=cat.id %}">{{ cat.name }}</a>
         {% endif %}
     {% endfor %}
@@ -19,7 +17,7 @@
         </div>
         <h2>
             {{ post.title }}
-            <small><i>{{ post.category }}, 작성자: {{ post.author }}, 추천: {{ post.like }} </i></small>
+            <small><i>{{ post.category }}, 작성자: {{ post.author }}</i></small>
         </h2>
         <p>{{ post.text|linebreaksbr }}</p>
         <p>
@@ -31,6 +29,8 @@
             <p>!!첨부된 오디오 파일이 없습니다!!</p>
         {% endif %}
         </p>
+        <p>Liked by [{{ post.like }}] : {{ post.like_list }}</p>
+        <p>Disliked by [{{ post.dislike }}] : {{ post.dislike_list }}</p>
         {% if user.is_authenticated %}
             <p>
             {% if user.is_superuser or user == post.author %}
@@ -38,6 +38,7 @@
             <a class="btn btn-lg btn-default" href="{% url 'board:post_remove' pk=post.pk %}">삭제</a>
             {% endif %}
             <a class="btn btn-lg btn-default" href="{% url 'board:post_like' pk=post.pk %}">추천</a>
+            <a class="btn btn-lg btn-default" href="{% url 'board:post_dislike' pk=post.pk %}">비추천</a>
             </p>
         {% endif %}
     </div>
