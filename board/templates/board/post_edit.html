@@ -4,6 +4,10 @@
     {% for cat in categories %}
         <a class="dropdown-item" href="{% url 'board:post_list' pk=cat.id %}">{{ cat.name }}</a>
     {% endfor %}
+    <div class="dropdown-divider"></div>
+    {% for tag in tags %}
+        <a class="dropdown-item" href="{% url 'board:post_list' tag=tag.name %}">#{{ tag.name }}</a>
+    {% endfor %}
 {% endblock %}
 
 {% block content %}

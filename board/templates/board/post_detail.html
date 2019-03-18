@@ -8,6 +8,10 @@
             <a class="dropdown-item" href="{% url 'board:post_list' pk=cat.id %}">{{ cat.name }}</a>
         {% endif %}
     {% endfor %}
+    <div class="dropdown-divider"></div>
+    {% for tag in tags %}
+        <a class="dropdown-item" href="{% url 'board:post_list' tag=tag.name %}">#{{ tag.name }}</a>
+    {% endfor %}
 {% endblock %}
 
 {% block content %}
@@ -29,6 +33,7 @@
             <p>!!첨부된 오디오 파일이 없습니다!!</p>
         {% endif %}
         </p>
+        <p>Tag : {{ post.tag_list }}</p>
         <p>Liked by [{{ post.like }}] : {{ post.like_list }}</p>
         <p>Disliked by [{{ post.dislike }}] : {{ post.dislike_list }}</p>
         {% if user.is_authenticated %}
