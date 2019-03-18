@@ -7,12 +7,17 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ('category', 'title', 'text', 'audio_file', 'tag_list')
+        widgets = {
+            'title': forms.TextInput(attrs={'placeholder': 'enter title here'}),
+            'text': forms.Textarea(attrs={'placeholder': 'enter description here'}),
+            'tag_list': forms.TextInput(attrs={'placeholder': '#add #hashtag #freely'}),
+        }
         labels = {
-            'category': '카테고리',
-            'title': '제목',
-            'text': '내용',
-            'audio_file': '첨부파일(오디오)',
-            'tag_list': '해시태그',
+            'category': 'Category',
+            'title': 'Title',
+            'text': 'Description',
+            'audio_file': 'Audio file',
+            'tag_list': '#hashtag',
         }
 
 class CoinAccountForm(forms.ModelForm):
@@ -21,5 +26,5 @@ class CoinAccountForm(forms.ModelForm):
         model = CoinAccount
         fields = ('address',)
         labels = {
-            'address': '계좌번호',
+            'address': 'Account address',
         }

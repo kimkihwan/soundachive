@@ -37,7 +37,7 @@
                     <a class="nav-link" href="{% url 'board:home' %}">Home</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">카테고리</a>
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Board</a>
                     <div class="dropdown-menu" aria-labelledby="dropdown1">
                         {% block dropdown %}
                         {% endblock %}
@@ -49,10 +49,10 @@
             <ul class="navbar-nav mt-2 mt-md-0 mr-sm-2">
                 {% if user.is_authenticated %}
                 <li class="nav-item active"><a class="nav-link" href="{% url 'board:my_info' %}">{{ user.username }}</a></li>
-                <li><a class="btn btn-outline-primary my-2 my-sm-0 mr-sm-1" href="{% url 'board:post_new' %}" role="button">새 포스트</a></li>
-                <li><a class="btn btn-outline-danger my-2 my-sm-0" href="{% url 'logout' %}" role="button">로그아웃</a></li>
+                <li><a class="btn btn-outline-primary my-2 my-sm-0 mr-sm-1" href="{% url 'board:post_new' %}" role="button">New Post</a></li>
+                <li><a class="btn btn-outline-danger my-2 my-sm-0" href="{% url 'logout' %}" role="button">Sign out</a></li>
                 {% else %}
-                <li><a class="btn btn-outline-warning my-2 my-sm-0" href="{% url 'login' %}" role="button">로그인</a></li>
+                <li><a class="btn btn-outline-warning my-2 my-sm-0" href="{% url 'login' %}" role="button">Sign in</a></li>
                 {% endif %}
             </ul>
         </div>
