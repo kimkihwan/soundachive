@@ -1,17 +1,61 @@
-{% extends 'board/base.html' %}
+{% extends 'board/base2.html' %}
 
-{% block dropdown %}
-    {% for cat in categories %}
-        {% if cat == post.category %}
-            <a class="dropdown-item active" href="{% url 'board:post_list' pk=cat.id %}">{{ cat.name }}</a>
-        {% else %}
-            <a class="dropdown-item" href="{% url 'board:post_list' pk=cat.id %}">{{ cat.name }}</a>
-        {% endif %}
-    {% endfor %}
-    <div class="dropdown-divider"></div>
-    {% for tag in tags %}
-        <a class="dropdown-item" href="{% url 'board:post_list' tag=tag.name %}">#{{ tag.name }}</a>
-    {% endfor %}
+{% block sidebar %}
+    <li>
+        <a href="#catSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Category</a>
+        <ul class="collapse list-unstyled" id="catSubmenu">
+            {% for cat in categories %}
+                <li>
+                    <a class="d-flex justify-content-between align-items-center" href="{% url 'board:post_list' pk=cat.id %}">
+                        <span>{{ cat.name }}</span>
+                        <span class="badge badge-light badge-pill mr-3">{{ cat.post_count }}</span>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </li>
+    <li>
+        <a href="#tagSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Hashtag</a>
+        <ul class="collapse list-unstyled" id="tagSubmenu">
+            {% for tag in tags %}
+                <li>
+                    <a class="d-flex justify-content-between align-items-center" href="{% url 'board:post_list' tag=tag.name %}">
+                        <span>#{{ tag.name }}</span>
+                        <span class="badge badge-light badge-pill mr-3">{{ tag.post_count }}</span>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </li>
+{% endblock %}
+
+{% block topnav %}
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle-split" href="#" id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Category</a>
+        <div class="dropdown-menu scrollable-menu" aria-labelledby="dropdown1">
+            {% for cat in categories %}
+                <div class="d-flex justify-content-between align-items-center">
+                    {% if cat == post.category %}
+                        <a class="dropdown-item active" href="{% url 'board:post_list' pk=cat.id %}">{{ cat.name }}</a>
+                    {% else %}
+                        <a class="dropdown-item" href="{% url 'board:post_list' pk=cat.id %}">{{ cat.name }}</a>
+                    {% endif %}
+                    <span class="badge badge-secondary badge-pill mr-2">{{ cat.post_count }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle-split" href="#" id="dropdown2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Hashtag</a>
+        <div class="dropdown-menu scrollable-menu" aria-labelledby="dropdown2">
+            {% for tag in tags %}
+            <div class="d-flex justify-content-between align-items-center">
+                <a class="dropdown-item" href="{% url 'board:post_list' tag=tag.name %}">#{{ tag.name }}</a>
+                <span class="badge badge-secondary badge-pill mr-2">{{ tag.post_count }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </li>
 {% endblock %}
 
 {% block content %}
@@ -21,29 +65,30 @@
         </div>
         <h2>
             {{ post.title }}
-            <small><i>{{ post.category }}, 작성자: {{ post.author }}</i></small>
+            <small><i>{{ post.category }}  <i class="fas fa-user-edit"></i>{{ post.author }}</i></small>
         </h2>
-        <p>{{ post.text|linebreaksbr }}</p>
         <p>
         {% if post.audio_file %}
             <audio controls style="width:100%; max-width:600px">
                 <source src="{{ post.audio_file.url }}">
             </audio>
         {% else %}
-            <p>!!첨부된 오디오 파일이 없습니다!!</p>
+            <p>[Audio file NOT uploaded]</p>
         {% endif %}
         </p>
-        <p>Tag : {{ post.tag_list }}</p>
+        <p>{{ post.text|linebreaksbr }}</p>
+        <div class="line"></div>
+        <p>Tags : {{ post.tag_list }}</p>
         <p>Liked by [{{ post.like }}] : {{ post.like_list }}</p>
         <p>Disliked by [{{ post.dislike }}] : {{ post.dislike_list }}</p>
         {% if user.is_authenticated %}
             <p>
             {% if user.is_superuser or user == post.author %}
-            <a class="btn btn-lg btn-default" href="{% url 'board:post_edit' pk=post.pk %}">수정</a>
-            <a class="btn btn-lg btn-default" href="{% url 'board:post_remove' pk=post.pk %}">삭제</a>
+            <a class="btn btn-lg btn-default" href="{% url 'board:post_edit' pk=post.pk %}"><i class="fas fa-edit"></i></a>
+            <a class="btn btn-lg btn-default" href="{% url 'board:post_remove' pk=post.pk %}"><i class="fas fa-trash-alt"></i></a>
             {% endif %}
-            <a class="btn btn-lg btn-default" href="{% url 'board:post_like' pk=post.pk %}">추천</a>
-            <a class="btn btn-lg btn-default" href="{% url 'board:post_dislike' pk=post.pk %}">비추천</a>
+            <a class="btn btn-lg btn-default" href="{% url 'board:post_like' pk=post.pk %}"><i class="fas fa-thumbs-up"></i> {{ post.like }}</a>
+            <a class="btn btn-lg btn-default" href="{% url 'board:post_dislike' pk=post.pk %}"><i class="fas fa-thumbs-down"></i> {{ post.dislike }}</a>
             </p>
         {% endif %}
     </div>

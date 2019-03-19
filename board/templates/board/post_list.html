@@ -1,51 +1,88 @@
-{% extends 'board/base.html' %}
+{% extends 'board/base2.html' %}
 
-{% block dropdown %}
-    {% for cat in categories %}
-        {% if selected_category and cat == selected_category %}
-            <a class="dropdown-item active" href="{% url 'board:post_list' pk=cat.id %}">{{ cat.name }}</a>
-        {% else %}
-            <a class="dropdown-item" href="{% url 'board:post_list' pk=cat.id %}">{{ cat.name }}</a>
-        {% endif %}
-    {% endfor %}
-    <div class="dropdown-divider"></div>
-    {% for tag in tags %}
-        <a class="dropdown-item" href="{% url 'board:post_list' tag=tag.name %}">#{{ tag.name }}</a>
-    {% endfor %}
+{% block sidebar %}
+    <li>
+        <a href="#catSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Category</a>
+        <ul class="collapse list-unstyled" id="catSubmenu">
+            {% for cat in categories %}
+                <li>
+                    <a class="d-flex justify-content-between align-items-center" href="{% url 'board:post_list' pk=cat.id %}">
+                        <span>{{ cat.name }}</span>
+                        <span class="badge badge-light badge-pill mr-3">{{ cat.post_count }}</span>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </li>
+    <li>
+        <a href="#tagSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Hashtag</a>
+        <ul class="collapse list-unstyled" id="tagSubmenu">
+            {% for tag in tags %}
+                <li>
+                    <a class="d-flex justify-content-between align-items-center" href="{% url 'board:post_list' tag=tag.name %}">
+                        <span>#{{ tag.name }}</span>
+                        <span class="badge badge-light badge-pill mr-3">{{ tag.post_count }}</span>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </li>
 {% endblock %}
 
-{% comment %} 
-{% block search %}
-    <form class="form-inline mt-2 mt-md-0 mr-md-2">
-    <!--form class="form-inline mt-2 mt-md-0 mr-md-2" method="post" action="{% url 'board:post_search' %}"-->
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">찾기</button>
-    </form>
-{% endblock %} 
-{% endcomment %}
+{% block topnav %}
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle-split" href="#" id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Category</a>
+        <div class="dropdown-menu scrollable-menu" aria-labelledby="dropdown1">
+            {% for cat in categories %}
+                <div class="d-flex justify-content-between align-items-center">
+                    {% if selected_category and cat == selected_category %}
+                        <a class="dropdown-item active" href="{% url 'board:post_list' pk=cat.id %}">{{ cat.name }}</a>
+                    {% else %}
+                        <a class="dropdown-item" href="{% url 'board:post_list' pk=cat.id %}">{{ cat.name }}</a>
+                    {% endif %}
+                    <span class="badge badge-secondary badge-pill mr-2">{{ cat.post_count }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle-split" href="#" id="dropdown2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Hashtag</a>
+        <div class="dropdown-menu scrollable-menu" aria-labelledby="dropdown2">
+            {% for tag in tags %}
+            <div class="d-flex justify-content-between align-items-center">
+                <a class="dropdown-item " href="{% url 'board:post_list' tag=tag.name %}">#{{ tag.name }}</a>
+                <span class="badge badge-secondary badge-pill mr-2">{{ tag.post_count }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </li>
+{% endblock %}
 
 {% block content %}
-    {% if selected_category %}
-        <h1>{{ selected_category.name }} <small> {{ posts|length }} 건의 포스트</small></h1>
-    {% elif selected_tag %}
-        <h1>#{{ selected_tag }} <small> {{ posts|length }} 건의 포스트</small></h1>
-    {% else %}
-        <h1>SoundArchive <small> {{ posts|length }} 건의 포스트</small></h1>
-    {% endif %}
+    <div class="post">
+        {% if selected_category %}
+            <h1>{{ selected_category.name }} : <small> {{ posts|length }} Posts</small></h1>
+        {% elif selected_tag %}
+            <h1>#{{ selected_tag }} : <small> {{ posts|length }} Posts</small></h1>
+        {% else %}
+            <h1>SoundArchive : <small> {{ posts|length }} Posts total</small></h1>
+        {% endif %}
+    </div>
     {% for post in posts %}
-        <hr>
+        <div class="line"></div>
         <div class="post">
             <h2>
-                <a href="{% url 'board:post_detail' pk=post.pk %}">{{ post.title }}</a>
-                <small><i>{{ post.category }}, 작성자: {{ post.author }} [+{{ post.like }}/-{{ post.dislike }}] </i></small>
+                <a class="mr-2" href="{% url 'board:post_detail' pk=post.pk %}">{{ post.title }}</a>
+                <small><i class="fas fa-tag"></i>{{ post.category }}  <i class="fas fa-user-edit"></i>{{ post.author }} [<i class="fas fa-thumbs-up"></i> {{ post.like }} / <i class="fas fa-thumbs-down"></i> {{ post.dislike }}] </small>
             </h2>
             <p><span class="date">{{ post.created_date }}</span></p>
         </div>
     {% empty %}
-        <hr>
+        <div class="line"></div>
         {% if selected_category %}
-            <div class="post"> <p>{{ selected_category.name }} 에는 포스트가 없습니다!</p> </div>
+            <div class="post"> <p>No post in {{ selected_category.name }}</p> </div>
         {% else %}
-            <div class="post"> <p>모든 카테고리에 포스트가 없습니다!</p> </div>
+            <div class="post"> <p>No post in any categories</p> </div>
         {% endif %}
     {% endfor %}
 {% endblock %}

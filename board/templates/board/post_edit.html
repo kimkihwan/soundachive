@@ -1,22 +1,66 @@
-{% extends 'board/base.html' %}
+{% extends 'board/base2.html' %}
 
-{% block dropdown %}
-    {% for cat in categories %}
-        <a class="dropdown-item" href="{% url 'board:post_list' pk=cat.id %}">{{ cat.name }}</a>
-    {% endfor %}
-    <div class="dropdown-divider"></div>
-    {% for tag in tags %}
-        <a class="dropdown-item" href="{% url 'board:post_list' tag=tag.name %}">#{{ tag.name }}</a>
-    {% endfor %}
+{% block sidebar %}
+    <li>
+        <a href="#catSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Category</a>
+        <ul class="collapse list-unstyled" id="catSubmenu">
+            {% for cat in categories %}
+                <li>
+                    <a class="d-flex justify-content-between align-items-center" href="{% url 'board:post_list' pk=cat.id %}">
+                        <span>{{ cat.name }}</span>
+                        <span class="badge badge-light badge-pill mr-3">{{ cat.post_count }}</span>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </li>
+    <li>
+        <a href="#tagSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Hashtag</a>
+        <ul class="collapse list-unstyled" id="tagSubmenu">
+            {% for tag in tags %}
+                <li>
+                    <a class="d-flex justify-content-between align-items-center" href="{% url 'board:post_list' tag=tag.name %}">
+                        <span>#{{ tag.name }}</span>
+                        <span class="badge badge-light badge-pill mr-3">{{ tag.post_count }}</span>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </li>
+{% endblock %}
+
+{% block topnav %}
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle-split" href="#" id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Category</a>
+        <div class="dropdown-menu scrollable-menu" aria-labelledby="dropdown1">
+            {% for cat in categories %}
+                <div class="d-flex justify-content-between align-items-center">
+                    <a class="dropdown-item" href="{% url 'board:post_list' pk=cat.id %}">{{ cat.name }}</a>
+                    <span class="badge badge-secondary badge-pill mr-2">{{ cat.post_count }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle-split" href="#" id="dropdown2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Hashtag</a>
+        <div class="dropdown-menu scrollable-menu" aria-labelledby="dropdown2">
+            {% for tag in tags %}
+            <div class="d-flex justify-content-between align-items-center">
+                <a class="dropdown-item " href="{% url 'board:post_list' tag=tag.name %}">#{{ tag.name }}</a>
+                <span class="badge badge-secondary badge-pill mr-2">{{ tag.post_count }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </li>
 {% endblock %}
 
 {% block content %}
-    <h2>포스트 편집 창</h2>
+    <h2>Edit Post</h2>
     <form method="POST" class="post-form" enctype="multipart/form-data">
         {% csrf_token %}
         <table>
 		    {{ form.as_table }}
 	    </table>
-        <button type="submit" class="save btn btn-default">저장</button>
+        <button type="submit" class="save btn btn-default">Save</button>
     </form>
 {% endblock %}

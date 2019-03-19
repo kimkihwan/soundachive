@@ -1,10 +1,12 @@
-{% extends 'board/base.html' %}
+{% extends 'board/base2.html' %}
 
 {% block content %}
-  <h2>회원 가입</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">가입하기</button>
-  </form>
+  <div class="post">
+    <h2>Sign up</h2>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button class="btn btn-md btn-primary" type="submit">sign up</button>
+    </form>
+  </div>
 {% endblock %}

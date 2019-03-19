@@ -3,6 +3,12 @@ from django.utils import timezone
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
+    post_count = models.IntegerField(default=0)
+
+    def refresh_count(self):
+        posts = Post.objects.filter(category__exact=self.id)
+        self.post_count = len(posts)
+        self.save()
 
     def __str__(self):
         return self.name
@@ -41,7 +47,7 @@ class Tag(models.Model):
     def get_posts(self):
         self.refresh_count()
         post_id_split = list(filter(None, self.post_id_list.split('#')))
-        posts = Post.objects.filter(id__in=post_id_split)
+        posts = Post.objects.filter(id__in=post_id_split).order_by('-like')
         return posts
 
     def __str__(self):
@@ -125,7 +131,6 @@ class Post(models.Model):
         else :
             return False
         
-
     def __str__(self):
         return self.title
 

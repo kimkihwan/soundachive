@@ -16,11 +16,15 @@ class SignUp(generic.CreateView):
 
 def post_list(request, pk=0, tag=''):
     categories = Category.objects.all().order_by('id')
+    for c in categories :
+        c.refresh_count()
     tags = Tag.objects.all().order_by('id')
+    for t in tags :
+        t.refresh_count()
     if pk and not tag:
         selected_category = Category.objects.get(id__exact=pk)
         selected_tag = ''
-        posts = Post.objects.filter(category__exact=selected_category).order_by('-created_date')
+        posts = Post.objects.filter(category__exact=selected_category).order_by('-like')
     elif tag:
         selected_category = 0
         selected_tag = Tag.objects.get(name__exact=tag)
@@ -70,7 +74,7 @@ def post_edit(request, pk):
         form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             post = form.save(commit=False)
-            post.author = request.user
+            #post.author = request.user
             post.published_date = timezone.localtime()
             post.add_tag()
             #post.save()
@@ -111,7 +115,6 @@ def my_info(request):
     except CoinAccount.DoesNotExist:
         my_account = 0
     # if request.method == "POST":
-
     return render(request, 'board/my_info.html', {
             'my_account': my_account, 
             'my_posts': my_posts, 
