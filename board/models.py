@@ -80,32 +80,38 @@ class Post(models.Model):
     def liked(self, new):
         like_split = list(filter(None, self.like_list.split(',')))
         dislike_split = list(filter(None, self.dislike_list.split(',')))
-        if new not in like_split :
-            if len(like_split) > 0 :
-                self.like_list += ','
-            self.like_list += new
-            self.like += 1
-            self.save()
-        if new in dislike_split :
-            dislike_split.remove(new)
-            self.dislike_list = ','.join(dislike_split)
-            self.dislike -= 1
-            self.save()
-
-    def disliked(self, new):
-        like_split = list(filter(None, self.like_list.split(',')))
-        dislike_split = list(filter(None, self.dislike_list.split(',')))
-        if new not in dislike_split :
-            if len(dislike_split) > 0 :
-                self.dislike_list += ','
-            self.dislike_list += new
-            self.dislike += 1
-            self.save()
         if new in like_split :
             like_split.remove(new)
             self.like_list = ','.join(like_split)
             self.like -= 1
-            self.save()
+        else :
+            if len(like_split) > 0 :
+                self.like_list += ','
+            self.like_list += new
+            self.like += 1
+        if new in dislike_split :
+            dislike_split.remove(new)
+            self.dislike_list = ','.join(dislike_split)
+            self.dislike -= 1
+        self.save()
+
+    def disliked(self, new):
+        like_split = list(filter(None, self.like_list.split(',')))
+        dislike_split = list(filter(None, self.dislike_list.split(',')))
+        if new in dislike_split :
+            dislike_split.remove(new)
+            self.dislike_list = ','.join(dislike_split)
+            self.dislike -= 1
+        else :
+            if len(dislike_split) > 0 :
+                self.dislike_list += ','
+            self.dislike_list += new
+            self.dislike += 1
+        if new in like_split :
+            like_split.remove(new)
+            self.like_list = ','.join(like_split)
+            self.like -= 1
+        self.save()
 
     def add_tag(self):
         tag_split = list(filter(None, self.tag_list.split('#')))
