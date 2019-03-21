@@ -67,10 +67,12 @@
         <div class="date">
             {{ post.created_date }}
         </div>
+        <br>
         <h2>
             {{ post.title }}
             <small><i class="fas fa-tag"></i>{{ post.category }}  <i class="fas fa-user-edit"></i>{{ post.author }}</small>
         </h2>
+        <br>
         <p>
         {% if post.audio_file %}
             <audio controls style="width:100%; max-width:600px">

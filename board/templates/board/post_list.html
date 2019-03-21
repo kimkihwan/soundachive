@@ -63,7 +63,7 @@
 {% endblock %}
 
 {% block content %}
-    <div class="post">
+    {% comment %} <div class="post">
         {% if selected_category %}
             <h1>{{ selected_category.name }} : <small> {{ posts|length }} Posts</small></h1>
         {% elif selected_tag %}
@@ -71,22 +71,22 @@
         {% else %}
             <h1>SoundArchive : <small> {{ posts|length }} Posts total</small></h1>
         {% endif %}
-    </div>
+    </div> {% endcomment %}
     {% for post in posts %}
-        <div class="line"></div>
         <div class="post">
-            <h2>
+            <h4>
                 <a class="mr-2" href="{% url 'board:post_detail' pk=post.pk %}">{{ post.title }}</a>
                 <small><i class="fas fa-tag"></i>{{ post.category }}  <i class="fas fa-user-edit"></i>{{ post.author }} [<i class="fas fa-thumbs-up"></i> {{ post.like }} / <i class="fas fa-thumbs-down"></i> {{ post.dislike }}] </small>
-            </h2>
+            </h4>
             <p><span class="date">{{ post.created_date }}</span></p>
         </div>
-    {% empty %}
         <div class="line"></div>
+    {% empty %}
         {% if selected_category %}
             <div class="post"> <p>No post in {{ selected_category.name }}</p> </div>
         {% else %}
             <div class="post"> <p>No post in any categories</p> </div>
         {% endif %}
+        <div class="line"></div>
     {% endfor %}
 {% endblock %}
