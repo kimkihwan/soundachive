@@ -57,8 +57,8 @@ def post_new(request):
             post = form.save(commit=False)
             post.author = request.user
             post.published_date = timezone.localtime()
+            post.save()
             post.add_tag()
-            #post.save()
             return redirect('board:post_detail', pk=post.pk)
     else:
         form = PostForm()
