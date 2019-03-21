@@ -34,14 +34,16 @@
         <a class="nav-link dropdown-toggle-split" href="#" id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Category</a>
         <div class="dropdown-menu scrollable-menu" aria-labelledby="dropdown1">
             {% for cat in categories %}
-                <div class="d-flex justify-content-between align-items-center">
-                    {% if selected_category and cat == selected_category %}
-                        <a class="dropdown-item active" href="{% url 'board:post_list' pk=cat.id %}">{{ cat.name }}</a>
-                    {% else %}
-                        <a class="dropdown-item" href="{% url 'board:post_list' pk=cat.id %}">{{ cat.name }}</a>
-                    {% endif %}
-                    <span class="badge badge-secondary badge-pill mr-2">{{ cat.post_count }}</span>
-                </div>
+                {% if selected_category and cat == selected_category %}
+                <a class="dropdown-item active" href="{% url 'board:post_list' pk=cat.id %}">
+                {% else %}
+                <a class="dropdown-item" href="{% url 'board:post_list' pk=cat.id %}">
+                {% endif %}
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>{{ cat.name }}</span>
+                        <span class="badge badge-secondary badge-pill">{{ cat.post_count }}</span>
+                    </div>
+                </a>
             {% endfor %}
         </div>
     </li>
@@ -49,10 +51,12 @@
         <a class="nav-link dropdown-toggle-split" href="#" id="dropdown2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Hashtag</a>
         <div class="dropdown-menu scrollable-menu" aria-labelledby="dropdown2">
             {% for tag in tags %}
-            <div class="d-flex justify-content-between align-items-center">
-                <a class="dropdown-item " href="{% url 'board:post_list' tag=tag.name %}">#{{ tag.name }}</a>
-                <span class="badge badge-secondary badge-pill mr-2">{{ tag.post_count }}</span>
-            </div>
+                <a class="dropdown-item " href="{% url 'board:post_list' tag=tag.name %}">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>#{{ tag.name }}</span>
+                        <span class="badge badge-secondary badge-pill">{{ tag.post_count }}</span>
+                    </div>
+                </a>
             {% endfor %}
         </div>
     </li>
