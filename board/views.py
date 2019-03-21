@@ -88,7 +88,19 @@ def post_edit(request, pk):
 def post_remove(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.delete()
-    return redirect('board:post_list')
+    posts = Post.objects.all().order_by('-created_date')
+    categories = Category.objects.all().order_by('id')
+    for c in categories :
+        c.refresh_count()
+    tags = Tag.objects.all().order_by('id')
+    for t in tags :
+        t.refresh_count()
+    return render(request, 'board/post_list.html', {
+            'posts': posts, 
+            'categories': categories, 
+            'tags': tags,
+            'selected_category': 0,
+            'selected_tag': ''})
 
 @login_required
 def post_like(request, pk):
